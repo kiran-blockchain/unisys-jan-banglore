@@ -8,14 +8,16 @@ import { Provider } from "react-redux";
 import { createStore ,applyMiddleware} from "redux";
 import combineReducers from "./redux";
 import thunk from 'redux-thunk';
+import  {Login}  from "./components/login";
 const App = () => {
   let store = createStore(combineReducers,applyMiddleware(thunk));
   return (
     <Provider store={store}>
       <div className="App">
         <Header />
-        <Button />
-        <Label />
+        <Login/>
+        {/* <Button />
+        <Label /> */}
         {/* <Register/> */}
       </div>
     </Provider>

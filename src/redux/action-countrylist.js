@@ -2,7 +2,7 @@ import Axios from "axios";
 export const getCountries =  () => {
   let url = "https://restcountries.eu/rest/v2/all";
   fetchCountriesBegin();
-  return async (d)=>{
+  return async (dispatch)=>{
       try {
         let countryList = await Axios(url);
         dispatch(fetchCountriesSuccess(countryList.data));
