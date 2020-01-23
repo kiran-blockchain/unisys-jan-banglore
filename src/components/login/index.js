@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown } from "../common/dropdown";
 import { getCountries } from "../../redux/action-countrylist";
+import { $CombinedState } from "redux";
+
 export const Login = () => {
   const [userDetails, setUserDetails] = useState({
     username: "Kiran",
     password: "Test"
   });
-
+let calendar="";
   const dispatch = useDispatch();
   const state = useSelector(x => {
     return x.CountryList;
@@ -20,6 +22,9 @@ export const Login = () => {
     if (state.list.length == 0) {
       dispatch(getCountries());
     }
+  if(calendar!=""){
+    window.$(calendar).datepicker();
+  }
   });
   return (
     <div className="card">
@@ -44,6 +49,11 @@ export const Login = () => {
         />
       </div>
       <Dropdown items={state.list} />
+      <input type="text" 
+      name="calendar"
+      className="form-control" 
+        ref={el=>{calendar=el}}
+      />
     </div>
   );
 };
