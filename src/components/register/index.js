@@ -1,117 +1,148 @@
-import React, { Component } from "react";
-import Axios from "axios";
-import { Dropdown } from "../common/dropdown";
+// import React from 'react';
+// import { Formik, Field, Form, ErrorMessage } from 'formik';
+// import { object, string } from 'yup';
+// import { Debug } from './debug';
 
-export default class Register extends Component {
-  constructor() {
-    super();
-    this.state = {
-      firstName: "",
-      lastName: "",
-      age: "",
-      gender: "M",
-      countryList: []
-    };
-  }
-  handleChange = e => {
-    console.log(e.target.name);
-    console.log(e.target.value);
-    let state = this.state;
-    state[e.target.name] = e.target.value;
-    this.setState(state);
-  };
-  getTextBox = obj => {
-    return (
-      <div className="form-group row">
-        <label htmlFor={obj.name} className="col-sm-2 col-form-label">
-          {obj.label}
-        </label>
-        <div className="col-sm-6">
-          <input
-            type="text"
-            className="form-control-plaintext"
-            name={obj.name}
-            id={obj.name}
-            value={obj.value}
-            onChange={this.handleChange}
-          />
-        </div>
-      </div>
-    );
-  };
+// const validationSchema = object().shape({
+//   email: string()
+//     .email('Invalid email')
+//     .required('Field is required'),
+//   username: string()
+//     .min(4, 'Must be at least 4 characters')
+//     .required('Field is required'),
+// });
 
-  async componentDidMount() {
-    console.log("Component Mounted");
-    try {
-      let items = await Axios.get("https://restcountries.eu/rest/v2/all");
-      //console.log(items);
-      let countryList = items.data.map(x => {
-        return { name: x.name, value: x.alpha2Code };
-      });
-      console.log(countryList);
-      this.setState({ ...this.state, countryList });
-    } catch (ex) {
-      console.log(ex.message);
+// const Register = () => (
+//   <div>
+//     <h1>Pick a username</h1>
+//     <Formik
+//       initialValues={{ username: '', email: '' }}
+//       validationSchema={validationSchema}
+//       onSubmit={values => {
+//         alert(JSON.stringify(values, null, 2));
+//       }}
+//       render={({
+//         errors,
+//         touched,
+//         setFieldValue,
+//         setFieldTouched,
+//         validateField,
+//         validateForm,
+//       }) => (
+//         <Form>
+//           <label htmlFor="username">Username</label>
+//           <div>
+//             <Field
+//               name="username"
+//               type="text"
+//               placeholder="Username"
+//             />
+//             <ErrorMessage name="username" />
+//           </div>
+//           <br />
+//           <div>
+//             <Field
+//               name="email"
+//               type="text"
+//               placeholder="Email"
+//             />
+//             <ErrorMessage name="email" />
+//           </div>
+
+//           <div>
+//             <div>username field actions</div>
+//             <button
+//               type="button"
+//               onClick={() => {
+//                 setFieldTouched('username', true, true);
+//               }}
+//             >
+//               setFieldTouched
+//             </button>
+//             <button
+//               type="button"
+//               onClick={() => {
+//                 setFieldValue('username', '', true);
+//               }}
+//             >
+//               setFieldValue
+//             </button>
+//             <button
+//               type="button"
+//               onClick={() => {
+//                 validateField('username');
+//               }}
+//             >
+//               validateField
+//             </button>
+//             <br />
+//           </div>
+//           <br />
+//           <div>
+//             <div>Form actions</div>
+//             <button type="button" onClick={validateForm}>
+//               validate form
+//             </button>
+//             <button type="submit">Submit</button>
+//           </div>
+//           <Debug />
+//         </Form>
+//       )}
+//     />
+//   </div>
+// );
+
+// export default Register;
+
+import React from 'react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Debug } from './Debug';
+
+// Async Validation
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const validate = (values) => {
+  return sleep(300).then(() => {
+    const errors = {};
+
+    if (['admin', 'null', 'god'].includes(values.username)) {
+      errors.username = 'Nice try';
     }
-  }
-  componentWillUnmount() {}
-  componentDidUpdate() {
-    console.log("Component updated");
-  }
-  componentDidCatch() {
-    console.log("Exception");
-  }
 
-  render() {
-    return (
-      <div className="container">
-        {this.getTextBox({
-          name: "firstName",
-          label: "First Name",
-          value: this.state.firstName
-        })}
-        {this.getTextBox({
-          name: "lastName",
-          label: "Last Name",
-          value: this.state.lastName
-        })}
-        {this.getTextBox({ name: "age", label: "Age", value: this.state.age })}
-        <div className="form-group row">
-          <label htmlFor="gender" className="col-sm-2 col-form-label">
-            Countries
-          </label>
-          <Dropdown
-            items={this.state.countryList}
-            handleChange={this.handleChange}
-            name={"selectedCountry"}
-          />
-        </div>
-        <div className="form-group row">
-          <label htmlFor="gender" className="col-sm-2 col-form-label">
-            Gender
-          </label>
-          <input
-            type="radio"
-            name="gender"
-            className="ml-1 mt-3"
-            value="M"
-            defaultChecked={this.state.gender == "M"}
-            onChange={this.handleChange}
-            title="Male"
-          />
-          <span className="ml-2 mt-2">Male</span>
-          <input
-            type="radio"
-            name="gender"
-            title="Female"
-            value="F"
-            defaultChecked={this.state.gender == "F"}
-            onChange={this.handleChange}
-          />
-          <span className="ml-2 mt-2">Female</span>
-        </div>
-        <div>{JSON.stringify(this.state.selectedCountry)}</div>
-      </div>
-    );
-  }
-}
+    if (!values.username) {
+      errors.username = 'Required';
+    }
+
+    if (Object.keys(errors).length) {
+      throw errors;
+    }
+  });
+};
+
+const Register = () => (
+  <div>
+    <h1>Pick a username</h1>
+    <Formik
+      initialValues={{
+        username: '',
+      }}
+      validate={validate}
+      onSubmit={values => {
+        sleep(500).then(() => {
+          alert(JSON.stringify(values, null, 2));
+        });
+      }}
+      render={({ errors, touched }) => (
+        <Form>
+          <label htmlFor="username">Username</label>
+          <Field name="username" type="text" />
+          <ErrorMessage name="username" />
+          <button type="submit">Submit</button>
+          <Debug />
+        </Form>
+      )}
+    />
+  </div>
+);
+
+export default Register;

@@ -1,11 +1,11 @@
 import React from "react";
-import { NavItems } from "./navitems";
-
-export const Header = () => {
+import NavItems  from "./navitems";
+// import {withRouter} from 'react-router-dom'
+export const Header = (props) => {
   let navItems = [
-    { name: "home", id: 1, displayName: "Home" },
-    { name: "electronics", id: 2, displayName: "Electronics" },
-    { name: "apparel", id: 2, displayName: "Apparel" }
+    { name: "home", id: 1, displayName: "Home",route:"home" },
+    { name: "register", id: 2, displayName: "Register" ,route:"register"},
+    { name: "login", id: 2, displayName: "Login",route:"login" }
   ];
   const handleClick =(item)=>{
     console.log(item);
@@ -26,7 +26,10 @@ export const Header = () => {
       >
         <span className="navbar-toggler-icon"></span>
       </button>
-      <NavItems navItems={navItems} handleClick={handleClick}/>
+      <NavItems navItems={navItems} handleClick={handleClick} history={props.history}/>
     </nav>
   );
 };
+
+
+  

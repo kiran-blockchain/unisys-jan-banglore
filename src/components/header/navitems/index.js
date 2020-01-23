@@ -1,6 +1,6 @@
 import React from "react";
-
-export const NavItems = props => {
+import {withRouter} from 'react-router-dom';
+const NavItems = props => {
   let home = "Home";
   console.log(props.navItems);
   return (
@@ -18,12 +18,14 @@ const getItems = (items,props) => {
       <li className="nav-item" key={index}  onClick={
         e=>{
          props.handleClick(item);
+         props.history.push(item.route);
         }
     }>
-        <a className="nav-link" href="#">
+        <a className="nav-link" href="javascript:void(0)">
           {item.displayName}
         </a>
       </li>
     );
   });
 };
+export default withRouter(NavItems);

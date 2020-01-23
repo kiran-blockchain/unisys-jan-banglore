@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Dropdown } from "../common/dropdown";
 import { getCountries } from "../../redux/action-countrylist";
 export const Login = () => {
